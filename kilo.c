@@ -17,14 +17,18 @@ void enableRawMode() {
 
     // Termios struct holding flags. Set to the default struct.
     struct termios raw = orig_termios;
-    
-    // Read attributes into the raw struct.
-    tcgetattr(STDIN_FILENO, &raw);
 
     // "c_lflag" is used for local, or misc., flags.
     // Use the NOT operater to flip the binary "...00001000" to "...11110111". 
     // Use the AND operateor to flip the fourth bit in the flags field to become 0.
-    raw.c_lflag &= ~(ECHO);
+    /**
+     * "c_lflag" is used for local, or misc., flags.
+     * Use the NOT operater to flip the binary "...00001000" to "...11110111
+     * Use the AND operateor to flip the fourth bit in the flags field to become 0.
+     * 
+     * Turn OFF Echo and Canonical Mode.
+    */
+    raw.c_lflag &= ~(ECHO | ICANON);
 
     // Applies the attributes in the struct to the terminal.
     // "TCSAFLUSH" arg waits for pending output to be written to the terminal. 
